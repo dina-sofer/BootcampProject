@@ -1,0 +1,23 @@
+#fetchingData {
+    display: flex;
+    flex-flow: row;
+    align-items: flex-start;
+    justify-content: center;
+    height: 700px;
+}
+
+.buttonFetch {
+    margin: 50px;
+    padding: 10px;
+    border: 1px grey solid;
+    border-radius: 10px;
+}
+
+.content {
+    border: 1px grey solid;
+    border-radius: 10px;
+    background-color: #e2e2e26e;
+    width: 50%;
+    height: 600px;
+    margin: 50px;
+}

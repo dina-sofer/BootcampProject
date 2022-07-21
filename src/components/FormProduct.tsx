@@ -1,28 +1,21 @@
-import { getValue } from '@testing-library/user-event/dist/utils';
 import React from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import WithRouter from '../components/WithRouter';
-import { products } from '../data/products';
-import NoImage from '../images/NoImage.jpg';
 
 class FormProduct extends React.Component<any, any> {
     constructor(props: any | Readonly<{ params: any; }>) {
         super(props);
         const id = this.props.id;
         this.state = {
-            productValue: this.findProduct(Number(id))
+            productValue: id !== 'null' ? this.findProduct(id) : ''
         };
         this.findProduct = this.findProduct.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
-    componentDidMount() {
-        
-    }
-
-    async findProduct(_id: number) {
+    async findProduct(_id: string) {
         try {
             const response = await fetch(`http://localhost:8080/products/${_id}`, {
                 method: 'GET',
@@ -48,6 +41,7 @@ class FormProduct extends React.Component<any, any> {
     async submitForm() {
         let _method: string;
         let _id: any;
+
         // create new product
         if(this.props.id === 'null') {
             _method = 'POST';
@@ -60,7 +54,6 @@ class FormProduct extends React.Component<any, any> {
         }
 
         try {
-            console.log(JSON.stringify(this.state.productValue))
             await fetch(`http://localhost:8080/products/${_id}`, {
                 method: _method,
                 headers: {

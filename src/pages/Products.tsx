@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Form, FormControl, Button, Row, Card, Alert, Modal } from "react-bootstrap";
-// import { products } from '../data/products';
 import NoImage from '../images/NoImage.jpg';
 import WithRouter from '../components/WithRouter';
 import { Link } from 'react-router-dom';
@@ -17,18 +16,13 @@ class Products extends React.Component< {}, any > {
     async componentDidMount() {
         try {
             const response = await fetch('http://localhost:8080/products/', {
-                // mode: "no-cors",
-                // headers: {
-                //     "access-control-allow-origin" : "*",
-                //     Accept: 'application/json'
-                // }
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',
                 },
             });
             const data = await response.json();
-            this.setState({ allProducts: data.products, productsToShow: data.products })
+            this.setState({ allProducts: data, productsToShow: data })
         }
         catch(error) {
             return {};
@@ -43,18 +37,11 @@ class Products extends React.Component< {}, any > {
     async deleteProduct(_id: number) {
         try {
             const response = await fetch(`http://localhost:8080/products/${_id}`, {
-                // mode: "no-cors",
-                // headers: {
-                //     "access-control-allow-origin" : "*",
-                //     Accept: 'application/json'
-                // }
                 method: 'DELETE',
                 headers: {
                     Accept: 'application/json',
                 },
             });
-            // const data = await response.json();
-            // this.setState({ productsToShow: data.products })
         }
         catch(error) {
             return error;
@@ -80,7 +67,7 @@ class Products extends React.Component< {}, any > {
                 </Form>
                 <Container>
                     <Row xs={1} md={4} className="g-4">
-                        {this.state.productsToShow.map((product: { ID: number; name: string; price: number; category: string; }) => (
+                        {this.state.productsToShow.map((product: { _id: any; name: string; price: number; }) => (
                             <Container>
                                 <Card className="mt-5 mb-5" style={{ width: '18rem' }}>
                                     <Card.Img variant="top" src={NoImage} className="card-images" />
@@ -89,11 +76,11 @@ class Products extends React.Component< {}, any > {
                                             <h2>{product.name}</h2>
                                         </Card.Title>
                                         <Card.Text>{`${product.price}$`}</Card.Text>
-                                        <Card.Link className='btn btn-outline-secondary btn-detail card-button' href={`/EditProduct/${product.ID}`}>Edit</Card.Link>
+                                        <Card.Link className='btn btn-outline-secondary btn-detail card-button' href={`/EditProduct/${product._id}`}>Edit</Card.Link>
                                         <Card.Link
                                             className='btn btn-outline-secondary btn-detail card-button'
                                             onClick={ () => {
-                                                this.setState({currentProductID: product.ID, showModal: true});
+                                                this.setState({currentProductID: product._id, showModal: true});
                                             }}
                                             >Delete
                                         </Card.Link>
@@ -102,6 +89,7 @@ class Products extends React.Component< {}, any > {
                             </Container>
                         ))}
                     </Row>
+                    {/* Alert whether to delete a product or not */}
                     <Modal
                         show={this.state.showModal}
                         onHide={this.handleClose}
